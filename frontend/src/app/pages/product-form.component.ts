@@ -8,57 +8,7 @@ import { ProductService } from '../services/product.service';
 @Component({
   selector: 'app-product-form',
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  template: `
-    <section class="section-heading">
-      <div>
-        <p class="eyebrow">Product Form</p>
-        <h1>{{ isEdit ? 'Edit Product' : 'Add Product' }}</h1>
-      </div>
-      <a class="button ghost" routerLink="/admin">Back to admin</a>
-    </section>
-
-    <form [formGroup]="form" (ngSubmit)="submit()" class="panel product-form">
-      <label>
-        Name
-        <input type="text" formControlName="name" />
-      </label>
-      <label>
-        Description
-        <textarea rows="4" formControlName="description"></textarea>
-      </label>
-      <div class="form-grid">
-        <label>
-          Price
-          <input type="number" min="1" formControlName="price" />
-        </label>
-        <label>
-          Stock
-          <input type="number" min="0" formControlName="stock" />
-        </label>
-      </div>
-      <label>
-        Category
-        <select formControlName="categoryId">
-          <option [ngValue]="null">Select category</option>
-          @for (category of categories$ | async; track category.id) {
-            <option [ngValue]="category.id">{{ category.name }}</option>
-          }
-        </select>
-      </label>
-      <label>
-        Image URL
-        <input type="url" formControlName="imageUrl" />
-      </label>
-
-      @if (errorMessage) {
-        <p class="alert error">{{ errorMessage }}</p>
-      }
-
-      <button type="submit" [disabled]="form.invalid || pending">
-        {{ isEdit ? 'Save changes' : 'Create product' }}
-      </button>
-    </form>
-  `
+  templateUrl: './product-form.component.html'
 })
 export class ProductFormComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);

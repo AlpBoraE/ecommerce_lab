@@ -7,27 +7,7 @@ import { AuthService } from '../services/auth.service';
 @Component({
   selector: 'app-login',
   imports: [CommonModule, ReactiveFormsModule],
-  template: `
-    <section class="auth-layout">
-      <form [formGroup]="form" (ngSubmit)="submit()" class="panel auth-panel">
-        <p class="eyebrow">Admin Login</p>
-        <h1>Login</h1>
-        <label>
-          Username
-          <input type="text" formControlName="username" />
-        </label>
-        <label>
-          Password
-          <input type="password" formControlName="password" />
-        </label>
-        <p class="muted">admin / 123456</p>
-        @if (errorMessage) {
-          <p class="alert error">{{ errorMessage }}</p>
-        }
-        <button type="submit" [disabled]="form.invalid || pending">Login</button>
-      </form>
-    </section>
-  `
+  templateUrl: './login.component.html'
 })
 export class LoginComponent {
   private readonly auth = inject(AuthService);

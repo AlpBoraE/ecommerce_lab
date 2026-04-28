@@ -10,52 +10,7 @@ import { ProductService } from '../services/product.service';
 @Component({
   selector: 'app-product-list',
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  template: `
-    <section class="section-heading">
-      <div>
-        <p class="eyebrow">Online Store</p>
-        <h1>Products</h1>
-      </div>
-      <div class="filters">
-        <input type="search" placeholder="Search products" [formControl]="searchControl" />
-        <select [formControl]="categoryControl">
-          <option [ngValue]="null">All categories</option>
-          @for (category of categories$ | async; track category.id) {
-            <option [ngValue]="category.id">{{ category.name }}</option>
-          }
-        </select>
-      </div>
-    </section>
-
-    <section class="product-grid">
-      @if (products$ | async; as products) {
-        @for (product of products; track product.id) {
-          <article class="product-card">
-            <img [src]="product.imageUrl || fallbackImage" [alt]="product.name" />
-            <div class="product-card-body">
-              <div>
-                <span class="chip">{{ product.category.name }}</span>
-                <h2>{{ product.name }}</h2>
-                <p>{{ product.description }}</p>
-              </div>
-              <div class="product-card-footer">
-                <strong>{{ product.price | currency: 'TRY' : 'symbol-narrow' }}</strong>
-                <span>{{ product.stock }} in stock</span>
-              </div>
-              <div class="actions">
-                <a class="button ghost" [routerLink]="['/products', product.id]">Details</a>
-                <button type="button" (click)="addToCart(product)" [disabled]="product.stock === 0">
-                  Add to cart
-                </button>
-              </div>
-            </div>
-          </article>
-        } @empty {
-          <p class="empty">No products found.</p>
-        }
-      }
-    </section>
-  `
+  templateUrl: './product-list.component.html'
 })
 export class ProductListComponent {
   private readonly productService = inject(ProductService);
