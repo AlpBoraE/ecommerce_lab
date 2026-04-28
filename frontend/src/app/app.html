@@ -1,0 +1,19 @@
+<header class="topbar">
+  <a class="brand" routerLink="/">AAD Shop</a>
+  <nav>
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Products</a>
+    <a routerLink="/cart" routerLinkActive="active">Cart</a>
+    <a routerLink="/admin" routerLinkActive="active">Admin</a>
+  </nav>
+  <div class="account">
+    @if (auth.loggedIn$ | async) {
+      <button type="button" class="ghost" (click)="logout()">Logout</button>
+    } @else {
+      <a class="button ghost" routerLink="/login">Login</a>
+    }
+  </div>
+</header>
+
+<main class="page">
+  <router-outlet />
+</main>
