@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { OrderRequest, OrderResponse } from '../models';
+import { AdminOrder, OrderRequest, OrderResponse } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class OrderService {
@@ -10,5 +10,21 @@ export class OrderService {
 
   createOrder(request: OrderRequest): Observable<OrderResponse> {
     return this.http.post<OrderResponse>(`${this.apiUrl}/orders`, request);
+  }
+
+  getMyOrders(): Observable<AdminOrder[]> {
+    return this.http.get<AdminOrder[]>(`${this.apiUrl}/orders`);
+  }
+
+  cancelMyOrder(orderId: number): Observable<AdminOrder> {
+    return this.http.patch<AdminOrder>(`${this.apiUrl}/orders/${orderId}/cancel`, {});
+  }
+
+  getAdminOrders(): Observable<AdminOrder[]> {
+    return this.http.get<AdminOrder[]>(`${this.apiUrl}/admin/orders`);
+  }
+
+  cancelAdminOrder(orderId: number): Observable<AdminOrder> {
+    return this.http.patch<AdminOrder>(`${this.apiUrl}/admin/orders/${orderId}/cancel`, {});
   }
 }

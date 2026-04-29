@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    return !!this.getToken() && !!this.getRole();
   }
 
   getRole(): AuthRole | null {
@@ -50,5 +50,9 @@ export class AuthService {
 
   isAdmin(): boolean {
     return this.getRole() === 'ADMIN';
+  }
+
+  isUser(): boolean {
+    return this.getRole() === 'USER';
   }
 }

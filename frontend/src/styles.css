@@ -243,7 +243,8 @@ p {
 }
 
 .cart-list,
-.admin-table {
+.admin-table,
+.admin-orders {
   display: grid;
   gap: 10px;
 }
@@ -350,6 +351,101 @@ p {
   box-shadow: none;
 }
 
+.order-card {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  background: #ffffff;
+  border: 1px solid #d8dee4;
+  border-radius: 8px;
+}
+
+.order-card.canceled-order {
+  background: #fff7f7;
+  border-color: #fecaca;
+}
+
+.order-card.canceled-order .order-items {
+  opacity: 0.72;
+}
+
+.order-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.order-card-header h2 {
+  margin-bottom: 4px;
+  font-size: 1.15rem;
+}
+
+.order-card-header strong {
+  font-size: 1.2rem;
+}
+
+.order-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 10px;
+  color: #166534;
+  background: #dcfce7;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.status-pill.canceled {
+  color: #b42318;
+  background: #fee2e2;
+}
+
+.order-meta {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 12px;
+  color: #64748b;
+}
+
+.order-items {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.order-items-header,
+.order-item-row {
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) 70px 130px 130px;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+}
+
+.order-items-header {
+  color: #64748b;
+  background: #f8fafc;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.order-item-row + .order-item-row {
+  border-top: 1px solid #e2e8f0;
+}
+
 .product-form {
   width: min(720px, 100%);
 }
@@ -405,8 +501,16 @@ p {
 
   .cart-row,
   .admin-row,
-  .admin-header {
+  .admin-header,
+  .order-meta,
+  .order-items-header,
+  .order-item-row {
     grid-template-columns: 1fr;
+  }
+
+  .order-card-header {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .cart-row img {

@@ -45,6 +45,27 @@ export interface OrderResponse {
   message: string;
 }
 
+export type OrderStatus = 'PLACED' | 'CANCELED';
+
+export interface AdminOrderItem {
+  productId: number;
+  productName: string;
+  quantity: number;
+  unitPrice: number;
+  lineTotal: number;
+}
+
+export interface AdminOrder {
+  id: number;
+  customerName: string;
+  customerEmail: string;
+  address: string;
+  createdAt: string;
+  totalPrice: number;
+  status: OrderStatus;
+  items: AdminOrderItem[];
+}
+
 export type AuthRole = 'ADMIN' | 'USER';
 
 export interface AuthResponse {

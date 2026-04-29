@@ -6,7 +6,7 @@ Bu proje PDF'deki isterlere gore hazirlanmis basit bir e-ticaret uygulamasidir.
 
 - Backend: Java 21, Spring Boot, Spring Data JPA, H2
 - Frontend: Angular, TypeScript, RxJS, Reactive Forms
-- Yetkilendirme: Basit JWT token, user/admin rolleri ve admin route guard
+- Yetkilendirme: Basit JWT token, user/admin rolleri, user route guard ve admin route guard
 
 ## Calistirma
 
@@ -56,24 +56,28 @@ Backend'de anlatilacak ana akis:
 Frontend'de anlatilacak ana akis:
 
 - `models.ts`: Backend'den gelen verilerin TypeScript tipleri.
-- `services`: API haberlesmesi, sepet, login, token interceptor ve admin guard.
-- `pages`: Product list, product detail, cart, order summary, login, admin panel, product form.
+- `services`: API haberlesmesi, sepet, login, token interceptor, auth guard ve admin guard.
+- `pages`: Product list, product detail, cart, order summary, login, admin panel, admin orders, product form.
 
 ## Onemli Endpoint'ler
 
 - `GET /api/products`: Urun listesi, kategori ve arama filtresi destekler.
 - `GET /api/products/{id}`: Urun detayi.
-- `POST /api/orders`: Sepetteki urunlerle siparis olusturur.
+- `GET /api/orders`: Login olmus USER hesabinin kendi siparislerini listeler.
+- `POST /api/orders`: Sadece login olmus USER hesabi icin sepetteki urunlerle siparis olusturur.
+- `PATCH /api/orders/{id}/cancel`: USER kendi siparisini iptal eder ve stogu geri ekler.
 - `POST /api/auth/login`: Admin veya user icin JWT token dondurur.
+- `GET /api/admin/orders`: Admin panelinde verilen siparisleri listeler.
+- `PATCH /api/admin/orders/{id}/cancel`: Admin verilen siparisi iptal eder ve stogu geri ekler.
 - `POST /api/admin/products`: Urun ekler.
 - `PUT /api/admin/products/{id}`: Urun gunceller.
 - `DELETE /api/admin/products/{id}`: Urun siler.
 
 ## Kisa Anlatim
 
-Kullanici Angular arayuzunde urunleri gorur, arama ve kategori filtresi kullanabilir, urunu sepete ekler ve siparis formunu doldurur. User hesabi ile login oldugunda sistem `USER` role sahip JWT token saklar.
+Kullanici `user / 123456` ile login oldugunda Angular arayuzunde urunleri gorur, arama ve kategori filtresi kullanabilir, urunu sepete ekler, siparis formunu doldurur ve My Orders sekmesinde kendi siparislerini gorur/iptal eder. Sistem `USER` role sahip JWT token saklar ve siparis olusturmayi sadece bu role acar.
 
-Admin once login olur. Backend JWT token uretir. Angular bu token'i `localStorage` icinde saklar ve `authInterceptor` her istege `Authorization` header'i olarak ekler. Backend'deki `AdminAuthInterceptor` sadece `/api/admin/**` endpoint'lerini korur. Frontend'deki `adminGuard` da sadece `ADMIN` rolunun admin sayfalarina girmesine izin verir.
+Admin `admin / 123456` ile login oldugunda sadece urun duzenleme ve verilen siparisleri gorme/iptal etme ekranlarini kullanir. Backend JWT token uretir. Angular bu token'i `localStorage` icinde saklar ve `authInterceptor` her istege `Authorization` header'i olarak ekler. Backend'deki `AdminAuthInterceptor` sadece `/api/admin/**` endpoint'lerini korur. Frontend'deki `adminGuard` da sadece `ADMIN` rolunun admin sayfalarina girmesine izin verir.
 
 ## Kontrol Edilenler
 

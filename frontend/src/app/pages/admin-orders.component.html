@@ -1,0 +1,73 @@
+<section class="section-heading">
+  <div>
+    <p class="eyebrow">Admin Panel</p>
+    <h1>Orders</h1>
+  </div>
+  <div class="actions">
+    <a class="button ghost" routerLink="/admin">Products</a>
+    <button type="button" (click)="refresh()">Refresh</button>
+  </div>
+</section>
+
+@if (errorMessage) {
+  <p class="alert error">{{ errorMessage }}</p>
+}
+@if (successMessage) {
+  <p class="alert success">{{ successMessage }}</p>
+}
+
+@if (orders$ | async; as orders) {
+  @if (orders.length > 0) {
+    <div class="admin-orders">
+      @for (order of orders; track order.id) {
+        <article class="order-card" [class.canceled-order]="order.status === 'CANCELED'">
+          <header class="order-card-header">
+            <div>
+              <p class="eyebrow">Order #{{ order.id }}</p>
+              <h2>{{ order.customerName }}</h2>
+              <p class="muted">{{ order.customerEmail }}</p>
+            </div>
+            <div class="order-actions">
+              <span class="status-pill" [class.canceled]="order.status === 'CANCELED'">
+                {{ order.status === 'CANCELED' ? 'Canceled' : 'Placed' }}
+              </span>
+              <strong>{{ order.totalPrice | currency: 'TRY' : 'symbol-narrow' }}</strong>
+              <button
+                type="button"
+                class="danger ghost"
+                [disabled]="order.status === 'CANCELED' || cancelingOrderId === order.id"
+                (click)="cancel(order)"
+              >
+                {{ order.status === 'CANCELED' ? 'Canceled' : 'Cancel' }}
+              </button>
+            </div>
+          </header>
+
+          <div class="order-meta">
+            <span>{{ order.createdAt | date: 'short' }}</span>
+            <span>{{ order.address }}</span>
+          </div>
+
+          <div class="order-items">
+            <div class="order-items-header">
+              <span>Product</span>
+              <span>Qty</span>
+              <span>Unit</span>
+              <span>Total</span>
+            </div>
+            @for (item of order.items; track item.productId) {
+              <div class="order-item-row">
+                <strong>{{ item.productName }}</strong>
+                <span>{{ item.quantity }}</span>
+                <span>{{ item.unitPrice | currency: 'TRY' : 'symbol-narrow' }}</span>
+                <span>{{ item.lineTotal | currency: 'TRY' : 'symbol-narrow' }}</span>
+              </div>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  } @else {
+    <p class="empty">No orders have been placed yet.</p>
+  }
+}

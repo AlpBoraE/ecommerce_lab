@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -12,6 +12,7 @@ import { AuthService } from '../services/auth.service';
 export class LoginComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   readonly form = new FormGroup({
     username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -31,10 +32,16 @@ export class LoginComponent {
     this.pending = true;
     this.errorMessage = '';
 
-    this.auth.login(username, password).subscribe({
+    this.auth.login(username.trim(), password).subscribe({
       next: () => {
         this.pending = false;
-        this.router.navigateByUrl(this.auth.isAdmin() ? '/admin' : '/');
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        if (this.auth.isAdmin()) {
+          this.router.navigateByUrl('/admin/orders');
+          return;
+        }
+
+        this.router.navigateByUrl(returnUrl?.startsWith('/admin') ? '/' : returnUrl || '/');
       },
       error: () => {
         this.pending = false;

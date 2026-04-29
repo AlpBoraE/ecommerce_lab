@@ -44,10 +44,40 @@ public class JwtUtil {
     }
 
     public boolean isValidAdminToken(String token) {
+        return isValidTokenWithRole(token, "ADMIN");
+    }
+
+    public boolean isValidUserToken(String token) {
+        return isValidTokenWithRole(token, "USER");
+    }
+
+    public boolean isValidToken(String token) {
         try {
             Map<String, Object> payload = readPayload(token);
             Number expiresAt = (Number) payload.get("exp");
-            return "ADMIN".equals(payload.get("role"))
+            Object role = payload.get("role");
+            return ("ADMIN".equals(role) || "USER".equals(role))
+                    && expiresAt != null
+                    && expiresAt.longValue() > Instant.now().getEpochSecond();
+        } catch (RuntimeException exception) {
+            return false;
+        }
+    }
+
+    public String getUsername(String token) {
+        Object username = readPayload(token).get("sub");
+        if (username instanceof String usernameValue && !usernameValue.isBlank()) {
+            return usernameValue;
+        }
+
+        throw new IllegalArgumentException("Invalid username");
+    }
+
+    private boolean isValidTokenWithRole(String token, String role) {
+        try {
+            Map<String, Object> payload = readPayload(token);
+            Number expiresAt = (Number) payload.get("exp");
+            return role.equals(payload.get("role"))
                     && expiresAt != null
                     && expiresAt.longValue() > Instant.now().getEpochSecond();
         } catch (RuntimeException exception) {

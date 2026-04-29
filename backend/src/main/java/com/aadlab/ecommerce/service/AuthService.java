@@ -4,6 +4,7 @@ import com.aadlab.ecommerce.dto.AuthResponse;
 import com.aadlab.ecommerce.dto.LoginRequest;
 import com.aadlab.ecommerce.exception.ApiException;
 import com.aadlab.ecommerce.security.JwtUtil;
+import java.util.Locale;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -31,12 +32,15 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        if (adminUsername.equals(request.username()) && adminPassword.equals(request.password())) {
-            return new AuthResponse(jwtUtil.createToken(request.username(), "ADMIN"), "ADMIN");
+        String username = request.username().trim();
+        String normalizedUsername = username.toLowerCase(Locale.ROOT);
+
+        if (adminUsername.toLowerCase(Locale.ROOT).equals(normalizedUsername) && adminPassword.equals(request.password())) {
+            return new AuthResponse(jwtUtil.createToken(adminUsername, "ADMIN"), "ADMIN");
         }
 
-        if (userUsername.equals(request.username()) && userPassword.equals(request.password())) {
-            return new AuthResponse(jwtUtil.createToken(request.username(), "USER"), "USER");
+        if (userUsername.toLowerCase(Locale.ROOT).equals(normalizedUsername) && userPassword.equals(request.password())) {
+            return new AuthResponse(jwtUtil.createToken(userUsername, "USER"), "USER");
         }
 
         throw new ApiException(HttpStatus.UNAUTHORIZED, "Username or password is wrong");

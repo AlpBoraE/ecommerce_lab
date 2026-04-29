@@ -8,13 +8,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     private final AdminAuthInterceptor adminAuthInterceptor;
+    private final AuthenticatedAuthInterceptor authenticatedAuthInterceptor;
 
-    public WebConfig(AdminAuthInterceptor adminAuthInterceptor) {
+    public WebConfig(
+            AdminAuthInterceptor adminAuthInterceptor,
+            AuthenticatedAuthInterceptor authenticatedAuthInterceptor
+    ) {
         this.adminAuthInterceptor = adminAuthInterceptor;
+        this.authenticatedAuthInterceptor = authenticatedAuthInterceptor;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authenticatedAuthInterceptor).addPathPatterns("/api/orders/**");
         registry.addInterceptor(adminAuthInterceptor).addPathPatterns("/api/admin/**");
     }
 

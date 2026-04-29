@@ -1,10 +1,18 @@
 <header class="topbar">
-  <a class="brand" routerLink="/">AAD Shop</a>
+  <a class="brand" [routerLink]="auth.isAdmin() ? '/admin/orders' : '/'">AAD Shop</a>
   <nav>
-    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Products</a>
-    <a routerLink="/cart" routerLinkActive="active">Cart</a>
+    @if ((auth.role$ | async) === 'USER') {
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        Products
+      </a>
+      <a routerLink="/cart" routerLinkActive="active">Cart</a>
+      <a routerLink="/orders" routerLinkActive="active">My Orders</a>
+    }
     @if ((auth.role$ | async) === 'ADMIN') {
-      <a routerLink="/admin" routerLinkActive="active">Admin</a>
+      <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        Product Edit
+      </a>
+      <a routerLink="/admin/orders" routerLinkActive="active">Orders</a>
     }
   </nav>
   <div class="account">
