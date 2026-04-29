@@ -321,6 +321,22 @@ p {
   width: min(420px, 100%);
 }
 
+.login-hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.login-hints span {
+  padding: 6px 10px;
+  color: #475569;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
 .admin-header,
 .admin-row {
   grid-template-columns: minmax(160px, 1fr) 150px 120px 80px 180px;

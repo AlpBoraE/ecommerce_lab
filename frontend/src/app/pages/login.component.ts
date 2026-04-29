@@ -34,7 +34,7 @@ export class LoginComponent {
     this.auth.login(username, password).subscribe({
       next: () => {
         this.pending = false;
-        this.router.navigateByUrl('/admin');
+        this.router.navigateByUrl(this.auth.isAdmin() ? '/admin' : '/');
       },
       error: () => {
         this.pending = false;

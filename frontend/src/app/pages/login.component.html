@@ -1,6 +1,6 @@
 <section class="auth-layout">
   <form [formGroup]="form" (ngSubmit)="submit()" class="panel auth-panel">
-    <p class="eyebrow">Admin Login</p>
+    <p class="eyebrow">Account Login</p>
     <h1>Login</h1>
     <label>
       Username
@@ -10,7 +10,10 @@
       Password
       <input type="password" formControlName="password" />
     </label>
-    <p class="muted">admin / 123456</p>
+    <div class="login-hints">
+      <span>user / 123456</span>
+      <span>admin / 123456</span>
+    </div>
     @if (errorMessage) {
       <p class="alert error">{{ errorMessage }}</p>
     }

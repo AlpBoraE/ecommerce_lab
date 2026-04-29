@@ -3,10 +3,15 @@
   <nav>
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Products</a>
     <a routerLink="/cart" routerLinkActive="active">Cart</a>
-    <a routerLink="/admin" routerLinkActive="active">Admin</a>
+    @if ((auth.role$ | async) === 'ADMIN') {
+      <a routerLink="/admin" routerLinkActive="active">Admin</a>
+    }
   </nav>
   <div class="account">
     @if (auth.loggedIn$ | async) {
+      @if (auth.role$ | async; as role) {
+        <span class="role-pill">{{ role === 'ADMIN' ? 'Admin' : 'User' }}</span>
+      }
       <button type="button" class="ghost" (click)="logout()">Logout</button>
     } @else {
       <a class="button ghost" routerLink="/login">Login</a>

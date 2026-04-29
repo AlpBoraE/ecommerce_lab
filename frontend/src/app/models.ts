@@ -45,7 +45,9 @@ export interface OrderResponse {
   message: string;
 }
 
+export type AuthRole = 'ADMIN' | 'USER';
+
 export interface AuthResponse {
   token: string;
-  role: string;
+  role: AuthRole;
 }
