@@ -18,14 +18,20 @@ export class AuthService {
   login(username: string, password: string): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(`${this.apiUrl}/auth/login`, { username, password })
-      .pipe(
-        tap((response) => {
-          localStorage.setItem(this.tokenKey, response.token);
-          localStorage.setItem(this.roleKey, response.role);
-          this.loggedInSubject.next(true);
-          this.roleSubject.next(response.role);
-        })
-      );
+      .pipe(tap((response) => this.storeAuth(response)));
+  }
+
+  register(username: string, password: string): Observable<AuthResponse> {
+    return this.http
+      .post<AuthResponse>(`${this.apiUrl}/auth/register`, { username, password })
+      .pipe(tap((response) => this.storeAuth(response)));
+  }
+
+  private storeAuth(response: AuthResponse): void {
+    localStorage.setItem(this.tokenKey, response.token);
+    localStorage.setItem(this.roleKey, response.role);
+    this.loggedInSubject.next(true);
+    this.roleSubject.next(response.role);
   }
 
   logout(): void {

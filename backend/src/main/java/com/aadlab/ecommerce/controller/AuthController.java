@@ -2,6 +2,7 @@ package com.aadlab.ecommerce.controller;
 
 import com.aadlab.ecommerce.dto.AuthResponse;
 import com.aadlab.ecommerce.dto.LoginRequest;
+import com.aadlab.ecommerce.dto.RegisterRequest;
 import com.aadlab.ecommerce.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,5 +22,10 @@ public class AuthController {
     @PostMapping("/login")
     public AuthResponse login(@Valid @RequestBody LoginRequest request) {
         return authService.login(request);
+    }
+
+    @PostMapping("/register")
+    public AuthResponse register(@Valid @RequestBody RegisterRequest request) {
+        return authService.register(request);
     }
 }

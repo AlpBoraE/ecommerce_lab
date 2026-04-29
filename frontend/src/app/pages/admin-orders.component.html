@@ -29,17 +29,19 @@
             </div>
             <div class="order-actions">
               <span class="status-pill" [class.canceled]="order.status === 'CANCELED'">
-                {{ order.status === 'CANCELED' ? 'Canceled' : 'Placed' }}
+                {{ order.status === 'CANCELED' ? 'Cancelled' : 'Placed' }}
               </span>
               <strong>{{ order.totalPrice | currency: 'TRY' : 'symbol-narrow' }}</strong>
-              <button
-                type="button"
-                class="danger ghost"
-                [disabled]="order.status === 'CANCELED' || cancelingOrderId === order.id"
-                (click)="cancel(order)"
-              >
-                {{ order.status === 'CANCELED' ? 'Canceled' : 'Cancel' }}
-              </button>
+              @if (order.status !== 'CANCELED') {
+                <button
+                  type="button"
+                  class="danger ghost"
+                  [disabled]="cancelingOrderId === order.id"
+                  (click)="cancel(order)"
+                >
+                  Cancel
+                </button>
+              }
             </div>
           </header>
 

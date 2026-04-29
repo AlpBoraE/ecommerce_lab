@@ -46,7 +46,7 @@ export class UserOrdersComponent {
     this.orderService.cancelMyOrder(order.id).subscribe({
       next: () => {
         this.cancelingOrderId = null;
-        this.successMessage = `Order #${order.id} marked as Canceled.`;
+        this.successMessage = `Order #${order.id} marked as Cancelled.`;
         this.refreshSubject.next();
       },
       error: () => {

@@ -2,24 +2,42 @@ package com.aadlab.ecommerce.config;
 
 import com.aadlab.ecommerce.entity.Category;
 import com.aadlab.ecommerce.entity.Product;
+import com.aadlab.ecommerce.entity.UserAccount;
 import com.aadlab.ecommerce.repository.CategoryRepository;
 import com.aadlab.ecommerce.repository.ProductRepository;
+import com.aadlab.ecommerce.repository.UserAccountRepository;
 import java.math.BigDecimal;
+import java.util.Locale;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DataSeeder implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
+    private final UserAccountRepository userAccountRepository;
+    private final String demoUsername;
+    private final String demoPassword;
 
-    public DataSeeder(CategoryRepository categoryRepository, ProductRepository productRepository) {
+    public DataSeeder(
+            CategoryRepository categoryRepository,
+            ProductRepository productRepository,
+            UserAccountRepository userAccountRepository,
+            @Value("${app.user.username}") String demoUsername,
+            @Value("${app.user.password}") String demoPassword
+    ) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
+        this.userAccountRepository = userAccountRepository;
+        this.demoUsername = demoUsername;
+        this.demoPassword = demoPassword;
     }
 
     @Override
     public void run(String... args) {
+        seedDemoUser();
+
         if (categoryRepository.count() > 0) {
             return;
         }
@@ -43,5 +61,12 @@ public class DataSeeder implements CommandLineRunner {
         product.setCategory(category);
         product.setImageUrl(imageUrl);
         productRepository.save(product);
+    }
+
+    private void seedDemoUser() {
+        String username = demoUsername.trim().toLowerCase(Locale.ROOT);
+        if (!userAccountRepository.existsByUsername(username)) {
+            userAccountRepository.save(new UserAccount(username, demoPassword));
+        }
     }
 }

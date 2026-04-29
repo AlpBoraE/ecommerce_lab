@@ -1,7 +1,25 @@
 <section class="auth-layout">
   <form [formGroup]="form" (ngSubmit)="submit()" class="panel auth-panel">
-    <p class="eyebrow">Account Login</p>
-    <h1>Login</h1>
+    <p class="eyebrow">Account</p>
+    <h1>{{ mode === 'login' ? 'Login' : 'Register' }}</h1>
+    <div class="auth-tabs">
+      <button
+        type="button"
+        class="ghost"
+        [class.active]="mode === 'login'"
+        (click)="setMode('login')"
+      >
+        Login
+      </button>
+      <button
+        type="button"
+        class="ghost"
+        [class.active]="mode === 'register'"
+        (click)="setMode('register')"
+      >
+        Register
+      </button>
+    </div>
     <label>
       Username
       <input type="text" formControlName="username" />
@@ -10,13 +28,17 @@
       Password
       <input type="password" formControlName="password" />
     </label>
-    <div class="login-hints">
-      <span>user / 123456</span>
-      <span>admin / 123456</span>
-    </div>
+    @if (mode === 'login') {
+      <div class="login-hints">
+        <span>user / 123456</span>
+        <span>admin / 123456</span>
+      </div>
+    }
     @if (errorMessage) {
       <p class="alert error">{{ errorMessage }}</p>
     }
-    <button type="submit" [disabled]="form.invalid || pending">Login</button>
+    <button type="submit" [disabled]="form.invalid || pending">
+      {{ mode === 'login' ? 'Login' : 'Register' }}
+    </button>
   </form>
 </section>

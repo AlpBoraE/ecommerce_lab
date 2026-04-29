@@ -15,12 +15,28 @@ export class LoginComponent {
   private readonly route = inject(ActivatedRoute);
 
   readonly form = new FormGroup({
-    username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    password: new FormControl('', { nonNullable: true, validators: [Validators.required] })
+    username: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(3)]
+    }),
+    password: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(6)]
+    })
   });
 
+  mode: 'login' | 'register' = 'login';
   pending = false;
   errorMessage = '';
+
+  setMode(mode: 'login' | 'register'): void {
+    if (this.pending) {
+      return;
+    }
+
+    this.mode = mode;
+    this.errorMessage = '';
+  }
 
   submit(): void {
     if (this.form.invalid) {
@@ -32,21 +48,31 @@ export class LoginComponent {
     this.pending = true;
     this.errorMessage = '';
 
-    this.auth.login(username.trim(), password).subscribe({
+    const request$ =
+      this.mode === 'login'
+        ? this.auth.login(username.trim(), password)
+        : this.auth.register(username.trim(), password);
+
+    request$.subscribe({
       next: () => {
         this.pending = false;
-        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-        if (this.auth.isAdmin()) {
-          this.router.navigateByUrl('/admin/orders');
-          return;
-        }
-
-        this.router.navigateByUrl(returnUrl?.startsWith('/admin') ? '/' : returnUrl || '/');
+        this.navigateAfterAuth();
       },
       error: () => {
         this.pending = false;
-        this.errorMessage = 'Login failed.';
+        this.errorMessage =
+          this.mode === 'login' ? 'Login failed.' : 'Register failed. Username may already be taken.';
       }
     });
+  }
+
+  private navigateAfterAuth(): void {
+    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+    if (this.auth.isAdmin()) {
+      this.router.navigateByUrl('/admin/orders');
+      return;
+    }
+
+    this.router.navigateByUrl(returnUrl?.startsWith('/admin') ? '/' : returnUrl || '/');
   }
 }
